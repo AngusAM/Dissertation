@@ -1,0 +1,19 @@
+# load packages 
+library(ggplot2)
+
+# retrieve data
+world <- map_data("world")
+europe <- subset(world, region %in% c("Albania", "Andorra", "Armenia", "Austria", "Azerbaijan",
+                                      "Belarus", "Belgium", "Bosnia and Herzegovina", "Bulgaria",
+                                      "Croatia", "Cyprus", "Czechia","Denmark","Estonia","Finland", 
+                                      "France","Georgia", "Germany", "Greece","Hungary","Iceland", 
+                                      "Ireland", "Italy","Kazakhstan", "Kosovo", "Latvia","Liechtenstein", 
+                                      "Lithuania", "Luxembourg","Malta","Moldova","Monaco","Montenegro",
+                                      "Macedonia", "Netherlands","Norway","Poland","Portugal","Romania",
+                                      "Russia","San Marino","Serbia","Slovakia","Slovenia","Spain",
+                                      "Sweden","Switzerland","Turkey","Ukraine","UK","Vatican"))
+# generate map 
+ggplot(data = europe, aes(x = long, y = lat, group = group)) + 
+  geom_polygon(fill = "white", color = "black") +
+  theme_void()
+coord_fixed(ratio=1.6, xlim = c(-50, 80)) # adjust plot for desited countries  
