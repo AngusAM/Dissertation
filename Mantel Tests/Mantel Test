@@ -1,0 +1,47 @@
+# Install and load the required packages
+install.packages("vegan")
+library(vegan)
+
+# Load matrices
+genetic_matrix <- read.csv("file name", row.names = 1)
+latlong_matrix <- read.csv("file name", row.names = 1)
+
+# Check if all entities are the same in both matrices (case-insensitive)
+all_entities_same <- all(tolower(row.names(genetic_matrix)) %in% tolower(row.names(latlong_matrix)))
+
+if (all_entities_same) {
+  print("All entities are the same in both matrices.")
+  
+  # Check if both matrices have the same entity names (case-insensitive)
+  common_entities <- intersect(tolower(row.names(genetic_matrix)), tolower(row.names(latlong_matrix)))
+  
+  if (length(common_entities) > 0) {
+    print("Both matrices have some common entity names.")
+    
+    # Write common entities to a file
+    write.table(common_entities, file = "common_entities.txt", col.names = FALSE, quote = FALSE)
+    
+    # Convert row and column names to indices
+    common_indices <- which(tolower(row.names(genetic_matrix)) %in% tolower(common_entities))
+    
+    # Subset matrices to include only common entity names
+    genetic_matrix <- genetic_matrix[common_indices, common_indices]
+    latlong_matrix <- latlong_matrix[common_indices, common_indices]
+    
+    # Replace NA values with 0 in both matrices
+    genetic_matrix[is.na(genetic_matrix)] <- 0
+    latlong_matrix[is.na(latlong_matrix)] <- 0
+    
+    # Perform Mantel test
+    mantel_result <- vegan::mantel(genetic_matrix, latlong_matrix, method = "pearson", permutations = 999)
+    
+    # Display Mantel test results
+    print(mantel_result)
+    
+  } else {
+    print("No common entity names found in the matrices.")
+  }
+  
+} else {
+  print("Not all entities are the same in both matrices.")
+}
