@@ -1,0 +1,30 @@
+# load packages
+library(tidyverse)
+
+# input data
+custom_data <- data.frame(
+  sample = c(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12),
+  long = c(-78.1911, -72.6622, -73.7667, -78.1842, -77.0556, -84.7994, -86.1253,
+           -111.3983, -121.6556, -120.6631, -122.2500, -122.0542),
+  lat = c(43.2469, 40.9283, 42.6500, 42.9986, 42.6600, 44.0192, 38.2128,
+          40.9172, 36.6778, 35.2742, 37.8000, 38.2578),
+  colour_code = c("#ff7f0e", "#98df8a", "#ff9896", "#9467bd", "#8c564b",
+                  "#e377c2", "#c5b0d5", "#d62728", "#1f77b4", "#aec7e8",
+                  "#ffbb78", "#2ca02c")
+)
+
+# load map
+usa <- map_data("world", region = "USA")
+
+# plot map
+ggplot() +
+  geom_polygon(data = usa, aes(x = long, y = lat, group = group),
+               fill = "white", color = "black") +
+  geom_point(data = custom_data, aes(x = long, y = lat, fill = colour_code),
+             colour = "black", pch = 21, alpha = 1.8, size = 3) +
+  scale_fill_identity(guide = "none") +
+  labs(
+    fill = "City"
+  ) +
+  coord_fixed(1.2, xlim = c(-125, -65), ylim = c(24, 49)) +
+  theme_void()
