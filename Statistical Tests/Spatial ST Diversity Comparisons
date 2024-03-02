@@ -1,0 +1,40 @@
+# Global 
+data <- data.frame(
+  Continent = c("Europe", "Asia", "Africa", "North America"),
+  SampleSize = c(289, 57, 56, 51),
+  ShannonDiversity = c(2.421117514, 1.849229131, 2.103849332, 2.857643725)
+)
+kruskal.test(ShannonDiversity ~ Continent, data = data)
+
+# Europe 
+data2 <- data.frame(
+  Country = c("United Kingdom", "Portugal", "Servia", "Belgium", "France", "Spain", "Italy", "Netherlands", "Greece", "Ukraine"),
+  SampleSize = c(131, 62, 53, 16, 11, 5, 4, 4, 1, 1),
+  ShannonDiversity = c(2.177156426, 1.980216683, 1.323593457, 1.721402322, 1.294545166, 0.950270539, 1.039720771, 1.039720771, 0, 0)
+)
+kruskal.test(ShannonDiversity ~ Country, data = data2)
+
+
+# Asia
+data3 <- data.frame(
+  Country = c("Nepal", "China", "Japan", "India", "Thailand", "Turkey"),
+  SampleSize = c(26, 18, 7, 2, 2, 1),
+  ShannonDiversity = c(1.619852872, 2.394830228, 0.410116318, 0.693147181, 0, 0)
+)
+kruskal.test(ShannonDiversity ~ Country, data = data3)
+
+
+
+# Africa
+data4 <- data.frame(
+  Country = c("Kenya", "Tanzania", "South Africa", "Uganda", "Zambia", "Ivory Coast", "Mozambique", "Namibia"),
+  SampleSize = c(27, 11, 7, 4, 4, 1, 1, 1),
+  ShannonDiversity = c(1.666069591, 1.720193459, 1.277034259, 0, 0.693147181, 0, 0, 0)
+)
+kruskal.test(ShannonDiversity ~ Country, data = data4)
+
+
+
+
+
+
