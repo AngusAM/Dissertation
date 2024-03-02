@@ -1,0 +1,24 @@
+# Create data frame with proportions and sample sizes
+data <- data.frame(
+  ST = c(93, 103, 90, 29, 98, 348, "Other"),
+  `1990-2000` = c(0.348, 0.129, 0.124, 0.079, 0.000, 0.039, 0.280898876),
+  `2000-2010` = c(0.194, 0.093, 0.078, 0.023, 0.000, 0.116, 0.496124031),
+  `2010-2020` = c(0.0336, 0.5294, 0.0252, 0.0252, 0.1681, 0, 0.218487395)
+)
+sample_sizes <- c(178, 129, 119)
+
+# Perform binomial proportion tests for each ST and time period
+for (i in 1:nrow(data)) {
+  for (j in 2:4) {
+    x <- round(data[i, j] * sample_sizes[j-1])  # Ensure integer number of successes
+    x <- ifelse(x < 0, 0, x)  # Ensure nonnegative
+    n <- sample_sizes[j-1]  # Sample size
+    p <- 0.5  # Null hypothesis: proportion is 0.5
+    
+    test_result <- binom.test(x, n, p)
+    cat("ST =", data[i, 1], ", Period:", names(data)[j], "\n")
+    print(test_result)
+    cat("\n")
+  }
+}
+
