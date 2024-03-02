@@ -1,0 +1,28 @@
+# Load packages
+library(tidyverse)
+
+# Data
+serbia_data <- data.frame(
+city = c("Ada", "Bačka Palanka", "Bačka Topola", "Čačak", "Futog", "Kula", "Novi Sad",
+         "Odzaci", "Temerin", "Senta", "Kovilj"),
+long = c(20.1222, 19.3886, 19.635, 20.3497, 19.7167, 19.5333, 19.8317, 19.2667, 19.8869, 20.09, 20.0217),
+lat = c(45.8014, 45.2506, 45.8089, 43.8914, 45.2333, 45.6, 45.2644, 45.5167, 45.4053, 45.9314, 45.2278),
+colour_code = c("#ff00db", "#808080", "#ffa500", "#ffff00", "#2986cc", "#00008b",
+                "#3cb44b", "#8104f6", "#ff0000", "#744700", "#000000")
+)
+
+
+serbia <- map_data("world", region = "Serbia")
+
+# Plot Map 
+ggplot(data = serbia, aes(x = long, y = lat, group = group)) +
+  geom_polygon(fill = "white", color = "black") +
+  coord_fixed() +
+  theme_void() +
+  geom_point(data = serbia_data, aes(x = long, y = lat, group = city,
+                                     fill = colour_code),
+             colour = "black", pch = 21, alpha = 0.8, size = 3) +
+  scale_fill_identity(guide = "none") +
+  labs(
+    fill = "City"
+  )
