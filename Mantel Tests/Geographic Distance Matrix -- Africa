@@ -1,0 +1,66 @@
+# Install and load the required packages
+install.packages("geosphere")
+library(geosphere)
+
+# Create the data frame with isolates and countries
+isolates <- data.frame(
+  isolate = c("WHRI7803", "WHRI8401", "WHRI8416A", "WHRI8423A", "WHRI8668", "WHRI8020C", "WHRI8020A", "WHRI8779", 
+              "WHRI8648", "WHRI8021", "WHRI8653", "WHRI8709", "WHRI8737", "WHRI8596", "WHRI8618", "WHRI8544", 
+              "WHRI8539", "WHRI8622", "WHRI7808", "WHRI8730", "WHRI8758", "WHRI8650", "WHRI7806", "WHRI8629", 
+              "WHRI8646", "WHRI8746", "WHRI8023C", "WHRI8023A", "WHRI8713", "WHRI8688", "WHRI8763", "WHRI6087", 
+              "WHRI8759", "WHRI8733", "WHRI8572", "WHRI8578", "WHRI8788", "WHRI8662", "WHRI7807", "WHRI8403", 
+              "WHRI8404", "WHRI8022A", "WHRI8022C", "8708", "WHRI8541", "WHRI8420A", "NCPPB1645", "WHRI8721", 
+              "WHRI7810", "WHRI8387", "WHRI8402", "WHRI7805", "WHRI8414A", "WHRI7804", "WHRI7809", "CFBP1869"),
+  country = c("South_Africa", "Tanzania", "Kenya", "Kenya", "Kenya", "Kenya", "Kenya", "Kenya", "Kenya", "Kenya", 
+              "Kenya", "Kenya", "Kenya", "Tanzania", "Uganda", "Tanzania", "Tanzania", "Uganda", "South_Africa", 
+              "Kenya", "Kenya", "Kenya", "South_Africa", "Uganda", "Uganda", "Kenya", "Zambia", "Zambia", "Kenya", 
+              "Kenya", "Kenya", "Mozambique", "Kenya", "Kenya", "Tanzania", "Tanzania", "Kenya", "Kenya", 
+              "South_Africa", "Tanzania", "Tanzania", "Zambia", "Zambia", "Kenya", "Tanzania", "Kenya", "Kenya", 
+              "Kenya", "South_Africa", "Tanzania", "Tanzania", "South_Africa", "Kenya", "South_Africa", "Namibia", 
+              "Ivory_Coast")
+)
+
+# Assign latitude and longitude values based on countries
+isolates$lat[isolates$country == "Kenya"] <- -1.2921
+isolates$lon[isolates$country == "Kenya"] <- 36.8219
+
+isolates$lat[isolates$country == "Tanzania"] <- -6.369028
+isolates$lon[isolates$country == "Tanzania"] <- -34.888822
+
+isolates$lat[isolates$country == "South_Africa"] <- -30.5595
+isolates$lon[isolates$country == "South_Africa"] <- -22.9375
+
+isolates$lat[isolates$country == "Namibia"] <- -22.9576
+isolates$lon[isolates$country == "Namibia"] <- 18.4904
+
+isolates$lat[isolates$country == "Ivory_Coast"] <- 7.539988
+isolates$lon[isolates$country == "Ivory_Coast"] <- -5.54708
+
+isolates$lat[isolates$country == "Uganda"] <- 1.3733
+isolates$lon[isolates$country == "Uganda"] <- 32.2903
+
+isolates$lat[isolates$country == "Zambia"] <- -13.1339
+isolates$lon[isolates$country == "Zambia"] <- 27.8493
+
+isolates$lat[isolates$country == "Mozambique"] <- -18.665695
+isolates$lon[isolates$country == "Mozambique"] <- 35.529562
+
+# Calculate distances using haversine formula
+distance_matrix <- matrix(NA, nrow = nrow(isolates), ncol = nrow(isolates))
+rownames(distance_matrix) <- isolates$isolate
+colnames(distance_matrix) <- isolates$isolate
+
+for (i in 1:(nrow(isolates) - 1)) {
+  for (j in (i + 1):nrow(isolates)) {
+    coords1 <- c(isolates$lon[i], isolates$lat[i])
+    coords2 <- c(isolates$lon[j], isolates$lat[j])
+    distance_matrix[i, j] <- distVincentySphere(coords1, coords2)
+    distance_matrix[j, i] <- distance_matrix[i, j]
+  }
+}
+
+# Display the distance matrix
+print(distance_matrix)
+
+# Export distance matrix to CSV
+write.csv(distance_matrix, file = "africa_latlong_matrix.csv")
