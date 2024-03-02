@@ -1,0 +1,24 @@
+install.packages("ape")
+library(ape)
+
+# List of tree file names
+tree_files <- c("africa.nwk", "europe.nwk", "usa.nwk", "serbia.nwk", "asia.nwk", "st103.nwk", "st93.nwk")
+
+# Function to process each tree file
+process_tree_file <- function(file_name) {
+  cat("Processing tree file:", file_name, "\n")
+  
+  # Read the phylogenetic tree from the Newick file
+  phy_tree <- read.tree(file = file_name)
+  
+  # Extract the distance matrix
+  dist_matrix <- cophenetic(phy_tree)
+  
+  # Save the distance matrix to a CSV file
+  csv_file_name <- paste0(tools::file_path_sans_ext(file_name), "_distance_matrix.csv")
+  write.csv(dist_matrix, file = csv_file_name)
+  cat("Distance matrix saved to:", csv_file_name, "\n\n")
+}
+
+# Process each tree file
+lapply(tree_files, process_tree_file)
